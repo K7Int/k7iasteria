@@ -100,6 +100,3 @@ jobs:
       - name: Build (vite) – Windows
         if: runner.os == 'Windows'
         run: npm run build
-
-      - name: Show artifacts
-        run: ls -lh src-tauri/target/debug/ | head -5
