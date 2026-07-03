@@ -6,10 +6,23 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "lowercase")]
 pub enum ProviderConfig {
-    Openai { api_key: String, model: String },
-    Anthropic { api_key: String, model: String },
-    Ollama { host: String, model: String },
-    Custom { endpoint: String, key: String, model: String },
+    Openai {
+        api_key: String,
+        model: String,
+    },
+    Anthropic {
+        api_key: String,
+        model: String,
+    },
+    Ollama {
+        host: String,
+        model: String,
+    },
+    Custom {
+        endpoint: String,
+        key: String,
+        model: String,
+    },
 }
 
 /// A provider plugs into the [`AiHub`] in the future. The hub will call

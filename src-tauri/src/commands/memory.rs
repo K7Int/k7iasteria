@@ -69,11 +69,21 @@ pub async fn update_memory(input: UpdateMemoryInput) -> CmdResult<Memory> {
         .get(&input.id)
         .await?
         .ok_or_else(|| crate::commands::CmdError("memory not found".into()))?;
-    if let Some(t) = input.title { m.title = t; }
-    if let Some(c) = input.content { m.content = c; }
-    if let Some(t) = input.tags { m.tags = t; }
-    if let Some(i) = input.icon { m.icon = i; }
-    if let Some(c) = input.color { m.color = Some(c); }
+    if let Some(t) = input.title {
+        m.title = t;
+    }
+    if let Some(c) = input.content {
+        m.content = c;
+    }
+    if let Some(t) = input.tags {
+        m.tags = t;
+    }
+    if let Some(i) = input.icon {
+        m.icon = i;
+    }
+    if let Some(c) = input.color {
+        m.color = Some(c);
+    }
     if let Some(o) = input.occurred_at {
         m.occurred_at = Some(chrono::DateTime::parse_from_rfc3339(&o)?.with_timezone(&chrono::Utc));
     }

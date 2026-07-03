@@ -42,40 +42,106 @@ pub async fn seed_sample_data(repo: &SqliteMemoryRepository) -> anyhow::Result<(
     let places = root_ids[6].clone();
 
     let examples: Vec<Memory> = vec![
-        sample(&books, "The Name of the Rose", MemoryKind::Log, &["fiction","history"],
-            json!({"author":"Umberto Eco","year":1980,"isbn":"978-0151001274","rating":5})),
-        sample(&books, "Gödel, Escher, Bach", MemoryKind::Log, &["nonfiction","math"],
-            json!({"author":"Douglas Hofstadter","year":1979,"rating":4})),
-        sample(&books, "Meditations", MemoryKind::Log, &["philosophy"],
-            json!({"author":"Marcus Aurelius","year":180,"rating":5})),
-
-        sample(&journals, "Berlin in winter", MemoryKind::Document, &["berlin","travel"],
-            json!({"weather":"snow","mood":"contemplative"}))
-            .with_content("Walked through Tiergarten. Café at Savignyplatz. Snow on the grate."),
-        sample(&journals, "Notes from the desert", MemoryKind::Document, &["desert"],
-            json!({"weather":"hot"}))
-            .with_content("Long drive.Pale dunes stretching to nothing. Quiet evening."),
-
-        sample(&trips, "Iceland 2022", MemoryKind::Folder, &["iceland","2022"],
-            json!({"country":"Iceland","year":2022})),
-        sample(&trips, "Morocco 2019", MemoryKind::Folder, &["morocco","2019"],
-            json!({"country":"Morocco","year":2019})),
-        sample(&trips, "Japan 2024", MemoryKind::Folder, &["japan","2024"],
-            json!({"country":"Japan","year":2024})),
-
-        sample(&workouts, "Morning run", MemoryKind::Log, &["run"],
-            json!({"distance_km":7.4,"duration_min":42,"hr_avg":148})),
-        sample(&workouts, "Strength", MemoryKind::Log, &["gym"],
-            json!({"sets":18,"exercises":["squat","bench","row"]})),
-        sample(&workouts, "Hike Skaftafell", MemoryKind::Log, &["hike","iceland"],
-            json!({"distance_km":14.0,"ascent_m":520})),
-
-        sample(&places, "Reykjavík", MemoryKind::Place, &["iceland","city"],
-            json!({"lat":64.1466,"lon":-21.9426})),
-        sample(&places, "Marrakech", MemoryKind::Place, &["morocco","city"],
-            json!({"lat":31.6295,"lon":-7.9811})),
-        sample(&places, "Tokyo", MemoryKind::Place, &["japan","city"],
-            json!({"lat":35.6762,"lon":139.6503})),
+        sample(
+            &books,
+            "The Name of the Rose",
+            MemoryKind::Log,
+            &["fiction", "history"],
+            json!({"author":"Umberto Eco","year":1980,"isbn":"978-0151001274","rating":5}),
+        ),
+        sample(
+            &books,
+            "Gödel, Escher, Bach",
+            MemoryKind::Log,
+            &["nonfiction", "math"],
+            json!({"author":"Douglas Hofstadter","year":1979,"rating":4}),
+        ),
+        sample(
+            &books,
+            "Meditations",
+            MemoryKind::Log,
+            &["philosophy"],
+            json!({"author":"Marcus Aurelius","year":180,"rating":5}),
+        ),
+        sample(
+            &journals,
+            "Berlin in winter",
+            MemoryKind::Document,
+            &["berlin", "travel"],
+            json!({"weather":"snow","mood":"contemplative"}),
+        )
+        .with_content("Walked through Tiergarten. Café at Savignyplatz. Snow on the grate."),
+        sample(
+            &journals,
+            "Notes from the desert",
+            MemoryKind::Document,
+            &["desert"],
+            json!({"weather":"hot"}),
+        )
+        .with_content("Long drive.Pale dunes stretching to nothing. Quiet evening."),
+        sample(
+            &trips,
+            "Iceland 2022",
+            MemoryKind::Folder,
+            &["iceland", "2022"],
+            json!({"country":"Iceland","year":2022}),
+        ),
+        sample(
+            &trips,
+            "Morocco 2019",
+            MemoryKind::Folder,
+            &["morocco", "2019"],
+            json!({"country":"Morocco","year":2019}),
+        ),
+        sample(
+            &trips,
+            "Japan 2024",
+            MemoryKind::Folder,
+            &["japan", "2024"],
+            json!({"country":"Japan","year":2024}),
+        ),
+        sample(
+            &workouts,
+            "Morning run",
+            MemoryKind::Log,
+            &["run"],
+            json!({"distance_km":7.4,"duration_min":42,"hr_avg":148}),
+        ),
+        sample(
+            &workouts,
+            "Strength",
+            MemoryKind::Log,
+            &["gym"],
+            json!({"sets":18,"exercises":["squat","bench","row"]}),
+        ),
+        sample(
+            &workouts,
+            "Hike Skaftafell",
+            MemoryKind::Log,
+            &["hike", "iceland"],
+            json!({"distance_km":14.0,"ascent_m":520}),
+        ),
+        sample(
+            &places,
+            "Reykjavík",
+            MemoryKind::Place,
+            &["iceland", "city"],
+            json!({"lat":64.1466,"lon":-21.9426}),
+        ),
+        sample(
+            &places,
+            "Marrakech",
+            MemoryKind::Place,
+            &["morocco", "city"],
+            json!({"lat":31.6295,"lon":-7.9811}),
+        ),
+        sample(
+            &places,
+            "Tokyo",
+            MemoryKind::Place,
+            &["japan", "city"],
+            json!({"lat":35.6762,"lon":139.6503}),
+        ),
     ];
 
     for mut m in examples {
@@ -97,7 +163,13 @@ pub async fn seed_sample_data(repo: &SqliteMemoryRepository) -> anyhow::Result<(
     Ok(())
 }
 
-fn sample(parent: &str, title: &str, kind: MemoryKind, tags: &[&str], meta: serde_json::Value) -> Memory {
+fn sample(
+    parent: &str,
+    title: &str,
+    kind: MemoryKind,
+    tags: &[&str],
+    meta: serde_json::Value,
+) -> Memory {
     let mut m = Memory::new(title, kind, Some(parent.to_string()));
     m.tags = tags.iter().map(|s| s.to_string()).collect();
     if let serde_json::Value::Object(map) = meta {
@@ -128,7 +200,9 @@ fn fastrand_days(seed: &str) -> i64 {
 }
 
 fn color_for(title: &str) -> String {
-    let palette = ["#7b2d2d","#3f6b3a","#b07b2d","#2d4e7b","#6b3a7b","#3a6b6b"];
+    let palette = [
+        "#7b2d2d", "#3f6b3a", "#b07b2d", "#2d4e7b", "#6b3a7b", "#3a6b6b",
+    ];
     let mut h: u64 = 0;
     for b in title.as_bytes() {
         h = h.wrapping_add(*b as u64 * 17);

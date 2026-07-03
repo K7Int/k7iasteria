@@ -30,7 +30,12 @@ pub trait MemoryRepository: Send + Sync + 'static {
     ) -> anyhow::Result<Vec<Memory>>;
     async fn count(&self) -> anyhow::Result<u64>;
     async fn link(&self, link: &Link) -> anyhow::Result<()>;
-    async fn unlink(&self, source: &MemoryId, target: &MemoryId, relation: &str) -> anyhow::Result<()>;
+    async fn unlink(
+        &self,
+        source: &MemoryId,
+        target: &MemoryId,
+        relation: &str,
+    ) -> anyhow::Result<()>;
     async fn links_of(&self, id: &MemoryId) -> anyhow::Result<Vec<Link>>;
     async fn set_state(&self, key: &str, value: &str) -> anyhow::Result<()>;
     async fn get_state(&self, key: &str) -> anyhow::Result<Option<String>>;
@@ -50,7 +55,9 @@ impl SqliteMemoryRepository {
     /// Execute many writes inside one transaction.
     pub async fn transaction<F, T>(&self, op: F) -> anyhow::Result<T>
     where
-        F: for<'c> FnOnce(&mut sqlx::Transaction<'c, sqlx::Sqlite>) -> std::pin::Pin<
+        F: for<'c> FnOnce(
+            &mut sqlx::Transaction<'c, sqlx::Sqlite>,
+        ) -> std::pin::Pin<
             Box<dyn std::future::Future<Output = anyhow::Result<T>> + Send + 'c>,
         >,
         T: Send,
@@ -305,7 +312,8 @@ fn row_to_memory(row: SqliteRow) -> Memory {
         serde_json::from_str(row.try_get::<String, _>("metadata").unwrap().as_str())
             .unwrap_or_default();
     let tags: Vec<String> =
-        serde_json::from_str(row.try_get::<String, _>("tags").unwrap().as_str()).unwrap_or_default();
+        serde_json::from_str(row.try_get::<String, _>("tags").unwrap().as_str())
+            .unwrap_or_default();
     let kind_str: String = row.try_get("kind").unwrap_or_default();
     Memory {
         id: row.try_get("id").unwrap(),
@@ -330,7 +338,9 @@ fn row_to_link(row: SqliteRow) -> Link {
         id: row.try_get("id").unwrap(),
         source_id: row.try_get("source_id").unwrap(),
         target_id: row.try_get("target_id").unwrap(),
-        relation: row.try_get("relation").unwrap_or_else(|_| "related".to_string()),
+        relation: row
+            .try_get("relation")
+            .unwrap_or_else(|_| "related".to_string()),
         created_at: row.try_get("created_at").unwrap(),
     }
 }

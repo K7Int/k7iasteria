@@ -6,6 +6,5 @@
 pub mod search;
 pub mod stats;
 
-
 pub use search::SearchService;
 pub use stats::{StatsService, SystemStats};

@@ -47,7 +47,10 @@ impl AiHub {
 
     pub fn status(&self) -> AiStatus {
         let active = self.config.read().unwrap().active.clone();
-        AiStatus { online: active.is_some(), provider: active }
+        AiStatus {
+            online: active.is_some(),
+            provider: active,
+        }
     }
 
     /// Cheap offline summariser: builds a traffic-light digest from the
@@ -93,10 +96,13 @@ impl AiHub {
         let headline = format!(
             "Your memory filesystem contains {} root collections and {} non-folder kinds.",
             all.len(),
-            kind_counts.iter().filter(|(k, _)| *k != "folder").map(|(_, v)| v).sum::<u32>(),
+            kind_counts
+                .iter()
+                .filter(|(k, _)| *k != "folder")
+                .map(|(_, v)| v)
+                .sum::<u32>(),
         );
-        let suggestion = "Open the Timeline to explore what you've collected by year."
-            .to_string();
+        let suggestion = "Open the Timeline to explore what you've collected by year.".to_string();
         Ok(InsightResult {
             headline,
             suggestion,
@@ -144,7 +150,10 @@ fn local_summarize(m: &Memory) -> String {
         parts.push(format!("Excerpt: {}…", words.join(" ")));
     }
     if !m.metadata.is_empty() {
-        parts.push(format!("Metadata keys: {}.", m.metadata.keys().cloned().collect::<Vec<_>>().join(", ")));
+        parts.push(format!(
+            "Metadata keys: {}.",
+            m.metadata.keys().cloned().collect::<Vec<_>>().join(", ")
+        ));
     }
     if parts.len() == 1 {
         parts.push("Empty memory — add content, tags or metadata to fill it in.".into());
@@ -173,5 +182,3 @@ fn local_suggest_tags(m: &Memory) -> Vec<String> {
     tags.truncate(12);
     tags
 }
-
-

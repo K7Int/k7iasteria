@@ -37,7 +37,11 @@ impl Importer for SampleImporter {
             if exists {
                 continue;
             }
-            let mut m = crate::domain::Memory::new(title.to_string(), crate::domain::MemoryKind::Folder, None);
+            let mut m = crate::domain::Memory::new(
+                title.to_string(),
+                crate::domain::MemoryKind::Folder,
+                None,
+            );
             m.id = id.to_string();
             m.icon = icon.to_string();
             repo.upsert(&m).await?;
