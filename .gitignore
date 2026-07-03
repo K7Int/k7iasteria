@@ -1,10 +1,66 @@
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build artifacts
+dist/
+dist-ssr/
+build/
+out/
 *.local
-.vite
-src-tauri/target
-src-tauri/gen
-src-tauri/asteria.db*
-.DS_Store
+.vite/
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+src-tauri/Cargo.lock.bak
+**/*.rs.bk
+
+# Local SQLite databases (do not ship user data)
+src-tauri/asteria.db
+src-tauri/asteria.db-*
+*.sqlite
+*.sqlite-*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor / IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Tauri dev artefacts
+src-tauri/WixTools/
+
+# Misc
+.cache/
+coverage/
+*.tsbuildinfo
+.eslintcache
