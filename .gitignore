@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+src-tauri/target
+src-tauri/gen
+src-tauri/asteria.db*
+.DS_Store
+.env
